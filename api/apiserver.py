@@ -294,7 +294,7 @@ def getMatchData(id):
     cursor.close()
     cnx.close()
 
-    return data
+    return data["data"]
 
 
 def queryMatch(id, cursor):
@@ -304,28 +304,11 @@ def queryMatch(id, cursor):
 
     collected = []
 
-    sql = "SELECT `data`->'$[*].animations[*].collected.*[*].textureName' AS collected FROM move WHERE match_id = '" + str(id) + "';"
+    sql = "SELECT data FROM move WHERE match_id = '" + str(id) + "';"
     cursor.execute(sql)
-    move_datas = cursor.fetchall()
-    for components in move_datas:
-        if(components['collected']):
-            collected.extend(json.loads(components['collected']))
+    data = cursor.fetchone()
 
-    collected = Counter(collected)
-
-    return {
-        "id": row['id'],
-        "player1": queryPlayerUsername(row['player1_uid'], cursor),
-        "player2": queryPlayerUsername(row['player2_uid'], cursor),
-        "deck1": queryDeck(row['deck1_id'], cursor),
-        "deck2": queryDeck(row['deck2_id'], cursor),
-        "winner": row['winner'],
-        "starttime": row['starttime'],
-        'endtime': row['endtime'],
-        "moves" : move_datas,
-        "collected" : collected
-    }
-
+    return data
 
 @app.route('/match')
 @cross_origin()

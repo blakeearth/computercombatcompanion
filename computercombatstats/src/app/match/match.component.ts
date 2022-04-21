@@ -26,11 +26,9 @@ export class MatchComponent implements OnInit {
       }
     });
     this.api = new ApiComponent(this.http);
-    this.api.getCallToURL("http://localhost:8080/match/" + this.id).subscribe((data: any) => {this.matchData = data;
-  
-    for (let move of this.matchData.moves) {
-      console.log(move);
-    }
-  });
+    this.api.getCallToURL("http://localhost:8080/match/" + this.id).subscribe((data: any) => {
+      this.matchData = data;
+      console.log(console.log(this.matchData));
+    });
   }
 }
